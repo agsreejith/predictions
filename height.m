@@ -1,0 +1,127 @@
+hnew=zeros(10800,1);
+h=zeros(10800,1);
+time=zeros(10800,1);
+P=zeros(10800,1);
+T=zeros(10800,1);
+R=zeros(10800,1);
+rho=zeros(10800,1);
+vnew=zeros(10800,1);
+vold=zeros(10800,1);
+a=zeros(10800,1);
+gz=zeros(10800,1);
+Re=6371009;
+T0=290;
+g0=9.80665;
+nhe=7.79*10^25;
+Rb=36000;
+kb=1.3806503*10^-23;
+Fb=zeros(10800,1);
+Fdb=zeros(10800,1);
+s=zeros(10800,1);
+Fdp=zeros(10800,1);
+Fd=zeros(10800,1);
+Fg=zeros(10800,1);
+Ab=1;
+Ap=.06;
+k=1;
+Mp=1;
+M=Mp+1.2;
+Rdiff=0;
+while (h(k,1)<=36000)
+    time(k,1)=k;
+    if(h(k,1)<11000)
+        b=0;
+        l=-0.0065;
+        P(k,1)=(102657*(1+(l*(h(k,1)-b)/T0))^5.2561);
+    else
+        if(h(k,1)>11000 && h(k,1)<25000)
+           b=11000;               
+           l=0;
+           T0=216;
+           P(k,1)=2265*exp(1.73-(.000157*h(k,1)));
+         else
+           b=25000;
+           l=0.0028;
+           T0=142;
+       end
+    end
+    %[T(k,1),s(k,1),P(k,1),rho(k,1)]=atmosisa(h(k,1));
+    T(k,1)=(T0+l*(h(k,1)-b));
+    if(b==25000)
+     P(k,1)=2488*((T(k,1)/216.6)^-11.388);
+    end
+    gz(k,1)=(g0*(Re/(Re+h(k,1)))^2);
+    rho(k,1)=(P(k,1)/(286.9*(T(k,1))));
+    R(k,1)=(((3*nhe*kb*T(k,1))/(4*pi*P(k,1)))^(1/3));
+    Fb(k,1)=((4*rho(k,1)*pi*(R(k,1)^3)*gz(k,1))/3);
+    Fdb(k,1)=(rho(k,1)*(vold(k,1)^2)*Ab*0.47);
+    Fdp(k,1)=(rho(k,1)*(vold(k,1)^2)*Ap);
+    Fd(k,1)=Fdb(k,1)+Fdp(k,1);
+    Fg(k,1)=M*gz(k,1);    
+    a(k,1)=(Fb(k,1)-Fd(k,1)-Fg(k,1))/M;
+    h(k+1,1)=h(k,1)+vold(k,1)+(a(k,1)/2);
+    vold(k+1,1)=(vold(k,1)+a(k,1));
+    vnew(k,1)=vold(k+1,1);
+    Rdiff=R(k,1)-12; 
+       if(Rdiff>0)
+    %if(h(k+1,1)>1000) 
+     disp('brust altitude');
+     break;   
+    end
+     k=k+1;
+end
+vold(k,1)=0;
+u=1;
+while(h(k,1)>0)
+    if(h(k,1)<11000) 
+       b=0;
+       l=-0.0065;
+       T0=290; 
+       P(k,1)=(102657*(1+(l*(h(k,1)-b)/T0))^5.2561);
+    else
+       if(h(k,1)>11000 && h(k,1)<25000)
+          b=11000;               
+          l=0;
+          T0=216;
+          P(k,1)=2265*exp(1.73-(.000157*h(k,1)));
+       else
+          b=25000;
+          l=0.0028;
+          T0=142;
+       end
+    end
+    %[T(k,1),s(k,1),P(k,1),rho(k,1)]=atmosisa(h(k,1));   using aerospace toolbar
+    T(k,1)=(T0+l*(h(k,1)-b));
+    if(b==25000)
+      P(k,1)=2488*((T(k,1)/216.6)^-11.388);
+    end
+    gz(k,1)=(g0*(Re/(Re+h(k,1)))^2);
+    rho(k,1)=(P(k,1)/(286.9*(T(k,1))));
+    Fg(k,1)=Mp*gz(k,1);
+    Fd(k,1)=(rho(k,1)*(vold(k,1)^2)*Ap*1.5);
+    a(k,1)=-1*(Fd(k,1)-Fg(k,1))/M;
+    h(k+1)=h(k,1)-vold(k,1)+(a(k,1)/2);
+    vold(k+1,1)=(vold(k,1)+a(k,1));
+    vnew(k,1)=vold(k+1,1);
+    u=Fd(k,1)-Fg(k,1);
+    %disp(u);
+    k=k+1;
+    if(u>0)
+      disp('brk');
+      break;
+    end  
+end
+z=h(k,1);
+disp(z);
+disp(k);
+while(h(k,1)>0)
+    v=4;
+    h(k+1,1)=h(k,1)-v;
+    n=h(k+1,1);
+    %disp(n);
+    k=k+1;
+end  
+
+
+
+
