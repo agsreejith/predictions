@@ -2,7 +2,7 @@ pro interpoltion
 h=dblarr(316)
 sp=dblarr(316)
 result=dblarr(316)
-openr,1,"E:\balloon prediction\height2.txt"
+openr,1,"E:\balloon prediction\height.txt"
 readf,1,h
 openw,2,"n-s bk.txt"
 spd1=[0,-21,-38.39998,-25.92,-13.44,-18.78999,-29.91,-20.93999,-9.400001,-3.9,-0.2,2.7,2.2,4.2799997,6.3199997,8.23,9.51999,8.34999,8.92,11.71999,10.38999,8.82,7.12,5.67,5.5099998,5.5099998,5.5099998]
