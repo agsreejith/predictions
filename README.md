@@ -1,6 +1,6 @@
 # predictions
-THe height.m (matlab) file calculates the height wrt time for balloon specifications we provide.
-THe lateral.pro (idl) files uses the hieght data and wind data from NOMADS to calculate lateral displacement
+The height.m (matlab) file calculates the height wrt time for balloon specifications provided.
+The lateral.pro (idl) files uses the hieght data and wind data from NOMADS to calculate lateral displacement
 
 Instructions for obtaining data from the NOMADS site
 
@@ -34,4 +34,4 @@ lat, [1]
 13.0
 lon, [1]
 77.0
-The above  values are correct: latitude and longitude is only known to 1 degree, the pressure goes from 1000->10 and the time value is the fifth one in the array (this can be checked by entering [0:64] in the first bracket instead of [4] and checking that the fifth value is indeed equal to 734679.5.
+The latitude and longitude are only known to 1 degree accurasy, the pressure varies from 1000->10 and the time information is the fifth value in the array.
